@@ -362,8 +362,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/0xLeif/SwiftUIKit";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.0;
+				branch = "feature/later-contracts";
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
