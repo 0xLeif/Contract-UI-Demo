@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  Contract-UI-Demo
-//
-//  Created by CRi on 8/25/20.
-//  Copyright © 2020 oneleif. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain

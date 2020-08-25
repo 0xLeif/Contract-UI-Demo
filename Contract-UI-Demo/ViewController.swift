@@ -1,20 +1,47 @@
-//
-//  ViewController.swift
-//  Contract-UI-Demo
-//
-//  Created by CRi on 8/25/20.
-//  Copyright © 2020 oneleif. All rights reserved.
-//
-
 import UIKit
+import Later
+import SwiftUIKit
 
 class ViewController: UIViewController {
-
+    var textContract: Contract<String>?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        let label = Label("❗️👀")
+        
+        view.embed {
+            VStack(distribution: .fillEqually) {
+                [
+                    label
+                        .text(alignment: .center)
+                        .number(ofLines: 3),
+                    Spacer(),
+                    HStack(distribution: .fillEqually) {
+                        [
+                            Button("Resign Contract") { [weak self] in
+                                self?.textContract?.resign()
+                            },
+                            Button("Update Text") { [weak self] in
+                                self?.textContract?.value = "Now: \(Date().timeIntervalSince1970)"
+                            }
+                        ]
+                    }
+                    .padding()
+                ]
+            }
+        }
+        
+        textContract = Contract(initialValue: "Hello, World!") { value in
+            Later.main {
+                label.text = value
+            }
+        }
+        .onResign { lastValue in
+            Later.main {
+                label.text = "Contract was Resigned\nLast Value: \(lastValue ?? "-1")"
+            }
+        }
     }
-
-
 }
 
