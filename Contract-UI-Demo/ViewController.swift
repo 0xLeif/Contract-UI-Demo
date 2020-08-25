@@ -3,12 +3,25 @@ import Later
 import SwiftUIKit
 
 class ViewController: UIViewController {
-    var textContract: Contract<String>?
+    let textContract = Contract<String>()
+    let label = Label("❗️👀")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let label = Label("❗️👀")
+        textContract
+            .onChange { value in
+                Later.main { [weak self] in
+                    self?.label.text = value
+                }
+        }
+        .onResign { lastValue in
+            Later.main { [weak self] in
+                self?.label.text = "Contract was Resigned\nLast Value: \(lastValue ?? "-1")"
+            }
+        }
+        
+        textContract.value = "Hello World"
         
         view.embed {
             VStack(distribution: .fillEqually) {
@@ -20,26 +33,15 @@ class ViewController: UIViewController {
                     HStack(distribution: .fillEqually) {
                         [
                             Button("Resign Contract") { [weak self] in
-                                self?.textContract?.resign()
+                                self?.textContract.resign()
                             },
                             Button("Update Text") { [weak self] in
-                                self?.textContract?.value = "Now: \(Date().timeIntervalSince1970)"
+                                self?.textContract.value = "Now: \(Date().timeIntervalSince1970)"
                             }
                         ]
                     }
                     .padding()
                 ]
-            }
-        }
-        
-        textContract = Contract(initialValue: "Hello, World!") { value in
-            Later.main {
-                label.text = value
-            }
-        }
-        .onResign { lastValue in
-            Later.main {
-                label.text = "Contract was Resigned\nLast Value: \(lastValue ?? "-1")"
             }
         }
     }
